@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="css/style.css">
+    <title>Weekly Schedule Planner</title>
+ 
+</head>
+<body>
+    <div class="schedule-container">
+        <h1>Week kalender</h1>
+        <div class="schedule-grid" id="scheduleGrid">
+            <div class="time-slot"></div>
+            <div class="day-header">Maandag</div>
+            <div class="day-header">Dinsdag</div>
+            <div class="day-header">Woensdag</div>
+            <div class="day-header">Donderdag</div>
+            <div class="day-header">Vrijdag</div>
+            <div class="day-header">Zaterdag</div>
+            <div class="day-header">Zondag</div>
+        </div>
+    </div>
+ 
+    <div class="modal" id="appointmentModal">
+        <h2>Afspraak inplannen</h2>
+        <form id="appointmentForm">
+            <label for="personName">Name:</label><br>
+            <input type="text" id="personName" required><br><br>
+           
+            <label for="appointmentTime">Time:</label><br>
+            <input type="time" id="appointmentTime" required><br><br>
+           
+            <label for="appointmentDetails">Details:</label><br>
+            <textarea id="appointmentDetails"></textarea><br><br>
+           
+            <button type="submit">Save</button>
+            <button type="button" onclick="closeModal()">Cancel</button>
+        </form>
+    </div>
+    <div class="overlay" id="overlay"></div>
+ 
+    <script>
+        // Initialize the time slots
+        const timeSlots = [];
+        for (let hour = 8; hour <= 18; hour++) {
+            timeSlots.push(`${hour}:00`);
+        }
+ 
+        // Create the grid
+        const grid = document.getElementById('scheduleGrid');
+        timeSlots.forEach(time => {
+            const timeCell = document.createElement('div');
+            timeCell.className = 'time-slot';
+            timeCell.textContent = time;
+            grid.appendChild(timeCell);
+ 
+            // Create cells for each day
+            for (let day = 0; day < 7; day++) {
+                const cell = document.createElement('div');
+                cell.className = 'schedule-cell';
+                cell.dataset.time = time;
+                cell.dataset.day = day;
+                cell.addEventListener('click', openModal);
+                grid.appendChild(cell);
+            }
+        });
+ 
+        // Modal functionality
+        const modal = document.getElementById('appointmentModal');
+        const overlay = document.getElementById('overlay');
+        let selectedCell = null;
+ 
+        function openModal(event) {
+            selectedCell = event.target;
+            modal.style.display = 'block';
+            overlay.style.display = 'block';
+        }
+ 
+        function closeModal() {
+            modal.style.display = 'none';
+            overlay.style.display = 'none';
+            document.getElementById('appointmentForm').reset();
+        }
+ 
+        // Handle form submission
+        document.getElementById('appointmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+           
+            const name = document.getElementById('personName').value;
+            const time = document.getElementById('appointmentTime').value;
+            const details = document.getElementById('appointmentDetails').value;
+ 
+            const appointment = document.createElement('div');
+            appointment.className = 'appointment';
+            appointment.textContent = `${name} - ${time}${details ? ': ' + details : ''}`;
+           
+            selectedCell.appendChild(appointment);
+            closeModal();
+        });
+    </script>
+</body>
+</html>

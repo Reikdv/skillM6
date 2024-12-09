@@ -1,0 +1,60 @@
+style.css
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+.schedule-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+.schedule-grid {
+    display: grid;
+    grid-template-columns: 100px repeat(7, 1fr);
+    gap: 2px;
+    background-color: #f0f0f0;
+}
+.time-slot, .day-header, .schedule-cell {
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: white;
+}
+.day-header {
+    font-weight: bold;
+    text-align: center;
+    background-color: #e6e6e6;
+}
+.schedule-cell {
+    min-height: 60px;
+    cursor: pointer;
+}
+.schedule-cell:hover {
+    background-color: #848484;
+}
+.appointment {
+    background-color: #b3e0ff;
+    padding: 5px;
+    margin: 2px;
+    border-radius: 3px;
+}
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 999;
+}

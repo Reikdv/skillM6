@@ -1,0 +1,36 @@
+services:
+ php:
+     image: wodby/php:latest
+     container_name: skill_kalender
+     volumes:
+         - './:/var/www/html'
+  
+ nginx:
+     image: nginx:latest
+     container_name: skill_m6_nginx
+     ports:
+        - 80:80
+     links:
+        - php          
+     volumes:
+         - './:/var/www/html'
+         - './docker:/etc/nginx/conf.d'
+ 
+ mariadb:
+     image: mariadb:latest
+     container_name: skill_kalender       
+     environment:
+            MYSQL_DATABASE: '${DB_NAME}'
+            MYSQL_USER: '${DB_USERNAME}'
+            MYSQL_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_ROOT_PASSWORD: '${DB_ROOT_PASSWORD}'
+ 
+ phpmyadmin:
+     image: phpmyadmin:latest
+     container_name: skill_kalender_phpmyadmin
+     ports:
+        - 8805:80
+     environment:
+            PMA_HOST: mariadb
+            PMA_USER: '${DB_USERNAME}'
+            PMA_PASSWORD: '${DB_PASSWORD}'
