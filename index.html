@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css">
     <title>Weekly Schedule Planner</title>
- 
 </head>
 <body>
     <div class="schedule-container">
@@ -21,32 +20,43 @@
             <div class="day-header">Zondag</div>
         </div>
     </div>
- 
+
     <div class="modal" id="appointmentModal">
         <h2>Afspraak inplannen</h2>
         <form id="appointmentForm">
             <label for="personName">Name:</label><br>
             <input type="text" id="personName" required><br><br>
-           
+
             <label for="appointmentTime">Time:</label><br>
-            <input type="time" id="appointmentTime" required><br><br>
-           
+            <input type="time" id="appointmentTime"><br><br>
+
             <label for="appointmentDetails">Details:</label><br>
             <textarea id="appointmentDetails"></textarea><br><br>
-           
+
+            <label for="paperType">Paper Type:</label><br>
+            <select id="paperType">
+                <option value="A3">A3</option>
+                <option value="A4">A4</option>
+                <option value="A5">A5</option>
+            </select><br><br>
+
+            <label for="reserveDay">
+                <input type="checkbox" id="reserveDay"> Reserve entire day
+            </label><br><br>
+
             <button type="submit">Save</button>
             <button type="button" onclick="closeModal()">Cancel</button>
         </form>
     </div>
     <div class="overlay" id="overlay"></div>
- 
+
     <script>
         // Initialize the time slots
         const timeSlots = [];
         for (let hour = 8; hour <= 18; hour++) {
             timeSlots.push(`${hour}:00`);
         }
- 
+
         // Create the grid
         const grid = document.getElementById('scheduleGrid');
         timeSlots.forEach(time => {
@@ -54,7 +64,7 @@
             timeCell.className = 'time-slot';
             timeCell.textContent = time;
             grid.appendChild(timeCell);
- 
+
             // Create cells for each day
             for (let day = 0; day < 7; day++) {
                 const cell = document.createElement('div');
@@ -65,37 +75,48 @@
                 grid.appendChild(cell);
             }
         });
- 
+
         // Modal functionality
         const modal = document.getElementById('appointmentModal');
         const overlay = document.getElementById('overlay');
         let selectedCell = null;
- 
+
         function openModal(event) {
             selectedCell = event.target;
             modal.style.display = 'block';
             overlay.style.display = 'block';
         }
- 
+
         function closeModal() {
             modal.style.display = 'none';
             overlay.style.display = 'none';
             document.getElementById('appointmentForm').reset();
         }
- 
+
         // Handle form submission
         document.getElementById('appointmentForm').addEventListener('submit', function(e) {
             e.preventDefault();
-           
+
             const name = document.getElementById('personName').value;
             const time = document.getElementById('appointmentTime').value;
             const details = document.getElementById('appointmentDetails').value;
- 
-            const appointment = document.createElement('div');
-            appointment.className = 'appointment';
-            appointment.textContent = `${name} - ${time}${details ? ': ' + details : ''}`;
-           
-            selectedCell.appendChild(appointment);
+            const paperType = document.getElementById('paperType').value;
+            const reserveDay = document.getElementById('reserveDay').checked;
+
+            if (reserveDay) {
+                const day = selectedCell.dataset.day;
+                const dayCells = document.querySelectorAll(`.schedule-cell[data-day='${day}']`);
+                dayCells.forEach(cell => {
+                    cell.innerHTML = `<div class="appointment">${name} - ${paperType}${details ? ': ' + details : ''}</div>`;
+                });
+            } else {
+                const appointment = document.createElement('div');
+                appointment.className = 'appointment';
+                appointment.textContent = `${name} - ${time} - ${paperType}${details ? ': ' + details : ''}`;
+
+                selectedCell.appendChild(appointment);
+            }
+
             closeModal();
         });
     </script>
