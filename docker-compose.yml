@@ -1,7 +1,7 @@
 services:
  php:
      image: wodby/php:latest
-     container_name: skill_kalender
+     container_name: skill_kalender_php
      volumes:
          - './:/var/www/html'
   
@@ -18,7 +18,7 @@ services:
  
  mariadb:
      image: mariadb:latest
-     container_name: skill_kalender       
+     container_name: skill_kalender_mariadb  
      environment:
             MYSQL_DATABASE: '${DB_NAME}'
             MYSQL_USER: '${DB_USERNAME}'
